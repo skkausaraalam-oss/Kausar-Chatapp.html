@@ -13,7 +13,6 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background-color: #374248; border-radius: 3px; }
         
-        /* Mobile Keyboard / Viewport Height Fix */
         .dynamic-height {
             height: 100vh;
             height: -webkit-fill-available;
@@ -22,9 +21,11 @@
 </head>
 <body class="dynamic-height flex items-center justify-center overflow-hidden fixed inset-0">
 
+    <!-- Audio Elements for Sounds -->
     <audio id="msg-sound" src="https://assets.mixkit.co/active_storage/sfx/2357/2357-84.wav" preload="auto"></audio>
     <audio id="delete-sound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav" preload="auto"></audio>
 
+    <!-- ================= LOG IN / PIN CONTAINER ================= -->
     <div id="auth-container" class="w-full max-w-md p-6 bg-[#222e35] rounded-lg shadow-2xl border border-[#374248] z-10 m-4">
         <div class="text-center mb-6">
             <div class="w-16 h-16 whatsapp-green text-white rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-lg">
@@ -34,26 +35,29 @@
             <p class="text-sm text-[#8696a0] mt-1">Private Encrypted Chat System</p>
         </div>
 
+        <!-- Phone Input Stage -->
         <div id="phone-stage">
             <label class="block text-xs font-semibold uppercase tracking-wider text-[#00a884] mb-2">Your Phone Number</label>
             <div class="flex gap-2 mb-4">
                 <span class="bg-[#2a3942] border border-[#374248] text-[#e9edef] px-3 py-3 rounded text-base flex items-center">+91</span>
                 <input type="tel" id="phone-number" placeholder="Enter 10 digit number" class="w-full bg-[#2a3942] border border-[#374248] text-[#e9edef] px-4 py-3 rounded text-base focus:outline-none focus:border-[#00a884] transition">
             </div>
-            <button onclick="goToPinStage()" class="w-full whatsapp-green hover:bg-[#008f72] text-[#111b21] font-bold py-3 px-4 rounded text-base transition duration-200 shadow-md">
+            <button id="btn-phone-next" class="w-full whatsapp-green hover:bg-[#008f72] text-[#111b21] font-bold py-3 px-4 rounded text-base transition duration-200 shadow-md">
                 Next <i class="fa-solid fa-arrow-right ml-1 text-sm"></i>
             </button>
         </div>
 
+        <!-- PIN Verification Stage -->
         <div id="otp-stage" class="hidden">
             <label class="block text-xs font-semibold uppercase tracking-wider text-[#00a884] mb-2">6-Digit Security PIN</label>
             <input type="password" id="otp-code" placeholder="Enter Security PIN" maxlength="6" class="w-full bg-[#2a3942] border border-[#374248] text-[#e9edef] px-4 py-3 rounded text-base text-center tracking-widest focus:outline-none focus:border-[#00a884] transition mb-4">
-            <button onclick="verifySecretPin()" class="w-full bg-[#00a884] hover:bg-[#008f72] text-[#111b21] font-bold py-3 px-4 rounded text-base transition duration-200 shadow-md">
+            <button id="btn-verify-pin" class="w-full bg-[#00a884] hover:bg-[#008f72] text-[#111b21] font-bold py-3 px-4 rounded text-base transition duration-200 shadow-md">
                 Verify & Login <i class="fa-solid fa-circle-check ml-1 text-sm"></i>
             </button>
         </div>
     </div>
 
+    <!-- ================= PREMIUM NAME SETUP POPUP ================= -->
     <div id="profile-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
         <div class="bg-[#222e35] border border-[#374248] w-full max-w-sm rounded-xl p-6 shadow-2xl">
             <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
@@ -61,15 +65,18 @@
             </h3>
             <p class="text-xs text-[#8696a0] mb-4">This name will be visible to your chat partners.</p>
             <input type="text" id="profile-name-input" placeholder="Enter Your Name (e.g. Kausar)" class="w-full bg-[#2a3942] border border-[#374248] text-[#e9edef] px-4 py-3 rounded-lg text-base focus:outline-none focus:border-[#00a884] transition mb-4">
-            <button onclick="saveProfileName()" class="w-full whatsapp-green hover:bg-[#008f72] text-[#111b21] font-bold py-3 rounded-lg transition shadow-md">
+            <button id="btn-save-profile" class="w-full whatsapp-green hover:bg-[#008f72] text-[#111b21] font-bold py-3 rounded-lg transition shadow-md">
                 Save & Open Chats
             </button>
         </div>
     </div>
 
+    <!-- ================= PREMIUM MAIN CHAT INTERFACE ================= -->
     <div id="chat-container" class="hidden w-full h-full flex z-10 overflow-hidden">
         
+        <!-- SIDEBAR: Chat List / Registered Contacts -->
         <div id="sidebar-panel" class="w-full md:w-[35%] bg-[#111b21] border-r border-[#222e35] flex flex-col h-full z-20">
+            <!-- Sidebar Header -->
             <div class="bg-[#202c33] h-[60px] p-4 flex items-center justify-between shadow-sm flex-shrink-0">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-[#00a884] text-[#111b21] font-bold flex items-center justify-center text-lg uppercase shadow" id="user-avatar">?</div>
@@ -78,26 +85,31 @@
                         <span class="text-[11px] text-[#8696a0]" id="user-phone">Loading Phone...</span>
                     </div>
                 </div>
-                <button onclick="logout()" class="text-[#8696a0] hover:text-[#ea0038] text-lg transition p-2" title="Logout">
+                <button id="btn-logout" class="text-[#8696a0] hover:text-[#ea0038] text-lg transition p-2" title="Logout">
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
             </div>
             
+            <!-- Private Section Label -->
             <div class="p-3 bg-[#111b21] border-b border-[#222e35] flex-shrink-0">
                 <span class="text-xs font-bold tracking-wider text-[#8696a0] uppercase block pl-1">Active Chat Logs</span>
             </div>
 
+            <!-- Dynamic User Target List Box -->
             <div id="users-list-box" class="flex-1 overflow-y-auto divide-y divide-[#222e35]">
                 <div class="p-4 text-center text-sm text-[#8696a0]">Searching secure directory logs...</div>
             </div>
         </div>
 
+        <!-- CHAT PANEL: Active Conversation Stream -->
         <div id="chat-panel" class="hidden md:flex flex-1 flex-col h-full bg-[#222e35] relative z-10 overflow-hidden">
             <div class="chat-bg"></div>
             
+            <!-- Chat Header -->
             <div class="bg-[#202c33] h-[60px] p-4 flex items-center justify-between border-b border-[#222e35] z-10 shadow-md flex-shrink-0">
                 <div class="flex items-center gap-3">
-                    <button onclick="closeChatWindow()" class="md:hidden text-[#8696a0] hover:text-[#e9edef] text-lg mr-1 py-1 px-2">
+                    <!-- Mobile Back Navigation Button -->
+                    <button id="btn-close-chat" class="md:hidden text-[#8696a0] hover:text-[#e9edef] text-lg mr-1 py-1 px-2">
                         <i class="fa-solid fa-arrow-left"></i>
                     </button>
                     <div class="w-10 h-10 bg-[#00a884] text-[#111b21] rounded-full flex items-center justify-center text-base font-bold shadow uppercase" id="active-chat-avatar">
@@ -110,6 +122,7 @@
                 </div>
             </div>
 
+            <!-- Messages Stream View Area -->
             <div id="messages-box" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-3 z-10 flex flex-col">
                 <div class="m-auto text-center max-w-xs bg-[#202c33] p-4 rounded-xl border border-[#374248]">
                     <i class="fa-solid fa-user-shield text-[#00a884] text-3xl mb-2 block"></i>
@@ -117,27 +130,32 @@
                 </div>
             </div>
 
+            <!-- Form Message Dispatch Bar -->
             <div id="input-bar-container" class="hidden bg-[#202c33] p-3 items-center gap-2 border-t border-[#222e35] z-10 shadow-inner flex-shrink-0 w-full">
                 
-                <input type="file" id="media-attachment-input" accept="image/*" class="hidden" onchange="processAndSendPhoto(this)">
+                <!-- Hidden Input For Uploading Camera or Album Media -->
+                <input type="file" id="media-attachment-input" accept="image/*" class="hidden">
                 
-                <button onclick="document.getElementById('media-attachment-input').click()" class="w-10 h-10 text-[#8696a0] hover:text-[#e9edef] flex items-center justify-center text-lg transition transform active:scale-90 flex-shrink-0" title="Send Photo / Camera">
+                <!-- Camera / Media Select Trigger Icon -->
+                <button id="btn-trigger-media" class="w-10 h-10 text-[#8696a0] hover:text-[#e9edef] flex items-center justify-center text-lg transition transform active:scale-90 flex-shrink-0" title="Send Photo / Camera">
                     <i class="fa-solid fa-camera"></i>
                 </button>
 
-                <button id="voice-record-btn" onclick="toggleVoiceRecording()" class="w-10 h-10 text-[#8696a0] hover:text-[#ea0038] flex items-center justify-center text-lg transition transform active:scale-90 flex-shrink-0" title="Record Voice">
+                <!-- Voice Recorder Button Icon -->
+                <button id="voice-record-btn" class="w-10 h-10 text-[#8696a0] hover:text-[#ea0038] flex items-center justify-center text-lg transition transform active:scale-90 flex-shrink-0" title="Record Voice">
                     <i class="fa-solid fa-microphone"></i>
                 </button>
 
                 <input type="text" id="message-field" placeholder="Type a private message..." autocomplete="off" class="flex-1 bg-[#2a3942] text-[#e9edef] text-base px-4 py-2.5 rounded-lg border border-[#374248] focus:outline-none focus:border-[#00a884] transition min-w-0">
                 
-                <button onclick="dispatchPrivateMessage()" class="w-11 h-11 whatsapp-green hover:bg-[#008f72] text-[#111b21] rounded-full flex items-center justify-center shadow-md transition transform active:scale-95 text-base flex-shrink-0">
+                <button id="btn-send-message" class="w-11 h-11 whatsapp-green hover:bg-[#008f72] text-[#111b21] rounded-full flex items-center justify-center shadow-md transition transform active:scale-95 text-base flex-shrink-0">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </div>
         </div>
     </div>
 
+    <!-- ================= FIREBASE APPLICATION LOGIC MODULING ================= -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -162,12 +180,126 @@
         let originalTitle = document.title;
         let blinkInterval = null;
 
-        // Voice Recording State Pointers
         let mediaRecorder = null;
         let audioChunks = [];
         let isRecording = false;
 
-        // Session Lifecycle Check Engine
+        // Binding functions directly to window object so HTML can access them inside module scope
+        window.deleteMessageForMe = function(msgId) {
+            if(confirm("Kya aap is message ko apne paas se delete karna chahte hain?")) {
+                let deletedIds = JSON.parse(localStorage.getItem('deleted_msg_ids') || '[]');
+                if(!deletedIds.includes(msgId)) {
+                    deletedIds.push(msgId);
+                    localStorage.setItem('deleted_msg_ids', JSON.stringify(deletedIds));
+                }
+                
+                const delAudio = document.getElementById('delete-sound');
+                if(delAudio) delAudio.play().catch(()=>{});
+
+                if(selectedTargetUser) streamPrivateMessagesBetweenUsers();
+            }
+        };
+
+        window.openTargetChatWindow = function(targetUserPhone) {
+            selectedTargetUser = targetUserPhone;
+            lastMessageCount = 0; 
+            
+            document.getElementById('sidebar-panel').classList.add('hidden', 'md:flex');
+            document.getElementById('sidebar-panel').classList.remove('w-full');
+            
+            const chatPanel = document.getElementById('chat-panel');
+            chatPanel.classList.remove('hidden');
+            chatPanel.classList.add('flex');
+
+            const mappedTargetName = cachedUsersNames[targetUserPhone] || targetUserPhone;
+            document.getElementById('active-chat-title').innerText = mappedTargetName;
+            document.getElementById('active-chat-avatar').innerText = mappedTargetName.substring(0, 1).toUpperCase();
+            
+            document.getElementById('input-bar-container').classList.remove('hidden');
+            document.getElementById('input-bar-container').classList.add('flex');
+
+            if(globalUnsubscribe) globalUnsubscribe();
+            streamPrivateMessagesBetweenUsers();
+        };
+
+        // Event Listeners for HTML Buttons (Fixes the unclickable Next button issue)
+        document.getElementById('btn-phone-next').addEventListener('click', () => {
+            const num = document.getElementById('phone-number').value.trim();
+            if (num.length !== 10 || isNaN(num)) {
+                alert("Please type a valid 10-digit mobile number.");
+                return;
+            }
+            activeUserPhone = "+91" + num;
+            document.getElementById('phone-stage').classList.add('hidden');
+            document.getElementById('otp-stage').classList.remove('hidden');
+        });
+
+        document.getElementById('btn-verify-pin').addEventListener('click', () => {
+            const pin = document.getElementById('otp-code').value.trim();
+            if (pin === "786055") {
+                localStorage.setItem('kausar_chat_session', activeUserPhone);
+                document.getElementById('auth-container').classList.add('hidden');
+                checkProfileSetupRequirement();
+            } else {
+                alert("Incorrect Security PIN. Access Denied.");
+            }
+        });
+
+        document.getElementById('btn-save-profile').addEventListener('click', async () => {
+            const chosenName = document.getElementById('profile-name-input').value.trim();
+            if(!chosenName || chosenName.length < 2) {
+                alert("Please enter a valid name (at least 2 letters).");
+                return;
+            }
+
+            document.getElementById('profile-modal').classList.add('hidden');
+            
+            await setDoc(doc(db, "registered_users", activeUserPhone), {
+                phone: activeUserPhone,
+                name: chosenName,
+                joinedAt: serverTimestamp()
+            }, { merge: true });
+
+            startPrivateSystem();
+        });
+
+        document.getElementById('btn-close-chat').addEventListener('click', () => {
+            document.getElementById('sidebar-panel').classList.remove('hidden');
+            document.getElementById('sidebar-panel').classList.add('w-full');
+            document.getElementById('chat-panel').classList.add('hidden');
+            document.getElementById('chat-panel').classList.remove('flex');
+            if(globalUnsubscribe) globalUnsubscribe();
+        });
+
+        document.getElementById('btn-trigger-media').addEventListener('click', () => {
+            document.getElementById('media-attachment-input').click();
+        });
+
+        document.getElementById('media-attachment-input').addEventListener('change', function() {
+            processAndSendPhoto(this);
+        });
+
+        document.getElementById('voice-record-btn').addEventListener('click', () => {
+            toggleVoiceRecording();
+        });
+
+        document.getElementById('btn-send-message').addEventListener('click', () => {
+            dispatchPrivateMessage();
+        });
+
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            if(confirm("Do you want to log out?")) {
+                localStorage.removeItem('kausar_chat_session');
+                localStorage.removeItem('deleted_msg_ids');
+                window.location.reload();
+            }
+        });
+
+        document.getElementById('message-field').addEventListener('keydown', (e) => {
+            if(e.key === 'Enter') dispatchPrivateMessage();
+        });
+
+        // Main Lifecycle Engine
         window.addEventListener('load', () => {
             const savedSession = localStorage.getItem('kausar_chat_session');
             if (savedSession) {
@@ -186,28 +318,6 @@
             document.title = originalTitle;
         });
 
-        window.goToPinStage = function() {
-            const num = document.getElementById('phone-number').value.trim();
-            if (num.length !== 10 || isNaN(num)) {
-                alert("Please type a valid 10-digit mobile number.");
-                return;
-            }
-            activeUserPhone = "+91" + num;
-            document.getElementById('phone-stage').classList.add('hidden');
-            document.getElementById('otp-stage').classList.remove('hidden');
-        };
-
-        window.verifySecretPin = function() {
-            const pin = document.getElementById('otp-code').value.trim();
-            if (pin === "786055") {
-                localStorage.setItem('kausar_chat_session', activeUserPhone);
-                document.getElementById('auth-container').classList.add('hidden');
-                checkProfileSetupRequirement();
-            } else {
-                alert("Incorrect Security PIN. Access Denied.");
-            }
-        };
-
         async function checkProfileSetupRequirement() {
             const userDocRef = doc(db, "registered_users", activeUserPhone);
             const userSnap = await getDoc(userDocRef);
@@ -219,24 +329,6 @@
                 document.getElementById('profile-modal').classList.remove('hidden');
             }
         }
-
-        window.saveProfileName = async function() {
-            const chosenName = document.getElementById('profile-name-input').value.trim();
-            if(!chosenName || chosenName.length < 2) {
-                alert("Please enter a valid name (at least 2 letters).");
-                return;
-            }
-
-            document.getElementById('profile-modal').classList.add('hidden');
-            
-            await setDoc(doc(db, "registered_users", activeUserPhone), {
-                phone: activeUserPhone,
-                name: chosenName,
-                joinedAt: serverTimestamp()
-            }, { merge: true });
-
-            startPrivateSystem();
-        };
 
         async function startPrivateSystem() {
             document.getElementById('auth-container').classList.add('hidden');
@@ -274,99 +366,4 @@
                     const printName = targetData.name || targetPhone;
                     const initialLetter = printName.substring(0, 1).toUpperCase();
 
-                    userRow.innerHTML = `
-                        <div class="w-11 h-11 bg-[#202c33] border border-[#374248] rounded-full flex items-center justify-center text-base text-[#00a884] font-bold shadow-md uppercase">
-                            ${initialLetter}
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h4 class="font-medium text-base text-[#e9edef] truncate">${printName}</h4>
-                            <p class="text-xs text-[#8696a0] truncate mt-0.5">${targetPhone}</p>
-                        </div>
-                    `;
-                    listContainer.appendChild(userRow);
-                });
-
-                if(totalCount === 0) {
-                    listContainer.innerHTML = `
-                        <div class="p-6 text-center text-sm text-[#8696a0]">
-                            <i class="fa-solid fa-user-plus text-2xl mb-2 block text-[#374248]"></i>
-                            No one is online right now.
-                        </div>`;
-                }
-            });
-        }
-
-        window.openTargetChatWindow = function(targetUserPhone) {
-            selectedTargetUser = targetUserPhone;
-            lastMessageCount = 0; 
-            
-            document.getElementById('sidebar-panel').classList.add('hidden', 'md:flex');
-            document.getElementById('sidebar-panel').classList.remove('w-full');
-            
-            const chatPanel = document.getElementById('chat-panel');
-            chatPanel.classList.remove('hidden');
-            chatPanel.classList.add('flex');
-
-            const mappedTargetName = cachedUsersNames[targetUserPhone] || targetUserPhone;
-            document.getElementById('active-chat-title').innerText = mappedTargetName;
-            document.getElementById('active-chat-avatar').innerText = mappedTargetName.substring(0, 1).toUpperCase();
-            
-            document.getElementById('input-bar-container').classList.remove('hidden');
-            document.getElementById('input-bar-container').classList.add('flex');
-
-            if(globalUnsubscribe) globalUnsubscribe();
-            streamPrivateMessagesBetweenUsers();
-        };
-
-        window.closeChatWindow = function() {
-            document.getElementById('sidebar-panel').classList.remove('hidden');
-            document.getElementById('sidebar-panel').classList.add('w-full');
-            document.getElementById('chat-panel').classList.add('hidden');
-            document.getElementById('chat-panel').classList.remove('flex');
-            if(globalUnsubscribe) globalUnsubscribe();
-        };
-
-        window.deleteMessageForMe = function(msgId) {
-            if(confirm("Kya aap is message ko apne paas se delete karna chahte hain?")) {
-                let deletedIds = JSON.parse(localStorage.getItem('deleted_msg_ids') || '[]');
-                if(!deletedIds.includes(msgId)) {
-                    deletedIds.push(msgId);
-                    localStorage.setItem('deleted_msg_ids', JSON.stringify(deletedIds));
-                }
-                
-                const delAudio = document.getElementById('delete-sound');
-                if(delAudio) delAudio.play().catch(()=>{});
-
-                if(selectedTargetUser) streamPrivateMessagesBetweenUsers();
-            }
-        };
-
-        function triggerTabBlink(senderName) {
-            if (document.hidden) {
-                clearInterval(blinkInterval);
-                let isMine = false;
-                blinkInterval = setInterval(() => {
-                    document.title = isMine ? `📩 New Chat from ${senderName}` : `⚠️ Kausar Hub Notification`;
-                    isMine = !isMine;
-                }, 1000);
-            }
-        }
-
-        // PHOTO CONVERTER AND DISPATCHER ENGINE
-        window.processAndSendPhoto = function(inputElement) {
-            const file = inputElement.files[0];
-            if (!file || !selectedTargetUser) return;
-
-            if (file.size > 2 * 1024 * 1024) {
-                alert("Photo size badi hai! Please 2MB se choti image select karein.");
-                inputElement.value = "";
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = async function(e) {
-                const base64Data = e.target.result;
-                try {
-                    await addDoc(collection(db, "whatsapp_chats"), {
-                        sender: activeUserPhone,
-      
+                    user
